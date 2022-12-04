@@ -6,11 +6,11 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:24 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/25 01:16:35 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/01 14:30:19 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 size_t	ft_strlen(const char *str)
 {

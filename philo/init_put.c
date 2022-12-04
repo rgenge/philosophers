@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/26 19:40:28 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/03 11:04:31 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,27 @@ void	exit_free(t_dt *dt, t_philo *philo, int flag)
 	}
 	free(dt);
 	exit (1);
+}
+
+void	digit_checker(int argc, char *argv[], t_philo *philo, t_dt *dt)
+{
+	int		i;
+
+	i = 0;
+	while (++i < argc)
+	{
+		if (argv[i][0] < '0' || argv[i][0] > '9')
+		{
+			ft_putstr_fd("ERR :Arguments must be digit > 0\n", STDERR);
+			exit_free(dt, philo, 0);
+		}
+	}
+	if ((argc == 6 && dt->n_must_eat <= 0) || (dt->num_philo < 0
+			|| dt->die_time < 0 || dt->eat_time < 0 || dt->sleep_time < 0))
+	{
+		ft_putstr_fd("ERR :Arguments must be > 0\n", STDERR);
+		exit_free(dt, philo, 0);
+	}
 }
 
 int	init(t_dt *dt, t_philo **philo, int argc, char *argv[])
@@ -40,12 +61,7 @@ int	init(t_dt *dt, t_philo **philo, int argc, char *argv[])
 	dt->all_eat = 0;
 	dt->forks = malloc(sizeof(pthread_mutex_t) * dt->num_philo);
 	*philo = (t_philo *)malloc(sizeof(t_philo) * dt->num_philo);
-	if ((argc == 6 && dt->n_must_eat <= 0) || (dt->num_philo < 0
-			|| dt->die_time < 0 || dt->eat_time < 0 || dt->sleep_time < 0))
-	{
-		ft_putstr_fd("ERR :Arguments must be > 0\n", STDERR);
-		exit_free(dt, *philo, 0);
-	}
+	digit_checker(argc, argv, *philo, dt);
 	if (dt->num_philo == 0)
 		exit_free(dt, *philo, 0);
 	init_philos(dt, *philo);
@@ -65,8 +81,14 @@ void	init_philos(t_dt *dt, t_philo *philo)
 		philo[i].dt = dt;
 		philo[i].state = START;
 	}
+	dt->lock_race = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_race2 = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_race3 = malloc(sizeof(pthread_mutex_t) * 1);
 	pthread_mutex_init(&dt->print_output, NULL);
 	pthread_mutex_init(&dt->lock_dead, NULL);
+	pthread_mutex_init(dt->lock_race, NULL);
+	pthread_mutex_init(dt->lock_race2, NULL);
+	pthread_mutex_init(dt->lock_race3, NULL);
 }
 
 void	put_screen(t_philo *philo, int doing)

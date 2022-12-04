@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/25 01:46:32 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/03 11:04:37 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ typedef struct s_dt
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_output;
 	pthread_mutex_t	lock_dead;
+	pthread_mutex_t	*lock_race;
+	pthread_mutex_t	*lock_race2;
+	pthread_mutex_t	*lock_race3;
 }	t_dt;
 
 typedef struct s_philo

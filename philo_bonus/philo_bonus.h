@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/27 17:41:57 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/03 03:08:58 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
@@ -21,6 +21,7 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <signal.h>
 # define START 0
 # define ERROR 1
 # define STDERR	2
@@ -43,9 +44,11 @@ typedef struct s_dt
 	int				n_must_eat;
 	int				all_eat;
 	long long		start;
-	sem_t	*forks;
-	sem_t	*print_output;
-	sem_t	*lock_dead;
+	int				status;
+	sem_t			*forks;
+	sem_t			*print_output;
+	sem_t			*lock_forks;
+	int				free_flag;
 }	t_dt;
 
 typedef struct s_philo
@@ -57,7 +60,6 @@ typedef struct s_philo
 	int					meals_count;
 	t_dt				*dt;
 	pthread_t			t;
-	pthread_mutex_t		*forks;
 	int					state;
 }	t_philo;
 /*init_put*/
@@ -72,4 +74,7 @@ void				*check_death(void *arg);
 void				ft_putstr_fd(char *s, int fd);
 int					ft_atoi(const char *s);
 long long int		get_time_now(void);
+void				exit_free_close(t_philo *philo);
+void				kill_process(t_philo *philo);
+void				exit_free_close_2(t_philo *philo);
 #endif

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:19 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/27 17:42:40 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/03 03:22:10 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	main(int argc, char *argv[])
 {
@@ -23,11 +23,6 @@ int	main(int argc, char *argv[])
 	dt->start = get_time_now();
 	philo->dt->dead = 0;
 	create_philos(philo, dt);
-	usleep(500);
-	dt->i = -1;
-	free(dt->forks);
-	free(dt);
-	free(philo);
 }
 
 int	fork_check(t_philo *philo)
@@ -50,10 +45,12 @@ void	*philo_doing(void *data)
 	while ((philo->meals_count < philo->dt->n_must_eat
 			|| philo->dt->n_must_eat == -1) && philo->dt->dead == 0)
 	{
+		sem_wait(philo->dt->lock_forks);
 		sem_wait(philo->dt->forks);
 		put_screen(philo, LEFT_FORK);
 		if (fork_check(philo) == 0)
 			return (NULL);
+		sem_post(philo->dt->lock_forks);
 		put_screen(philo, EAT);
 		philo->state = EAT;
 		philo->meals_count++;
@@ -75,59 +72,51 @@ void	*check_death(void *arg)
 	long long	now;
 
 	philo = arg;
-	while (philo->dt->dead != DEAD && philo->dt->all_eat < philo->dt->num_philo)
+	while (1)
 	{
-		philo->dt->i = -1;
-		while (++philo->dt->i < philo->dt->num_philo)
+		if (philo->state != EAT)
 		{
-			if (philo[philo->dt->i].state != EAT)
+			now = get_time_now();
+			if (now - philo->last_eat >= philo->dt->die_time)
 			{
-				now = get_time_now();
-				if (now - philo[philo->dt->i].last_eat >= philo->dt->die_time)
-				{
-					philo->dt->dead = DEAD;
-					put_screen(philo, DEAD);
-					exit(1);
-				}
-				if (philo[philo->dt->i].meals_count >= philo->dt->n_must_eat
-					&& philo->dt->n_must_eat != -1)
-					philo->dt->all_eat++;
+				philo->dt->dead = DEAD;
+				put_screen(philo, DEAD);
+				exit_free_close_2(philo);
 			}
+			if (philo->meals_count >= philo->dt->n_must_eat
+				&& philo->dt->n_must_eat != -1)
+			philo->dt->all_eat++;
+			if (philo->meals_count == philo->dt->n_must_eat)
+				exit_free_close_2(philo);
 		}
+		usleep(200);
 	}
 	return (NULL);
 }
 
 void	create_philos(t_philo *philo, t_dt *dt)
 {
-	pthread_t	monitor;
+	int	x;
 
 	dt->i = -1;
-/*	while (++dt->i < dt->num_philo)
-	{
-		philo[dt->i].last_eat = get_time_now();
-		pthread_create(&philo[dt->i].t, NULL, philo_doing, &philo[dt->i]);
-		usleep(50);
-	}*/
 	while (++dt->i < dt->num_philo)
 	{
 		philo[dt->i].pid = fork();
 		if (philo[dt->i].pid == 0)
 		{
-			philo[dt->i].last_eat = get_time_now();
 			pthread_create(&philo[dt->i].t, NULL, philo_doing, &philo[dt->i]);
+			check_death(&philo[dt->i]);
 		}
 		philo[dt->i].last_eat = get_time_now();
 		usleep(50);
 	}
-	waitpid(&pid, 0, NULL);
-	pthread_create(&monitor, NULL, &check_death, philo);
-	usleep(1000);
-	philo->dt->i = -1;
-	while (++philo->dt->i < philo->dt->num_philo)
+	while (waitpid(-1, &x, 0) >= 0)
 	{
-		pthread_join(philo[philo->dt->i].t, NULL);
-		exit(1);
+		if (WIFEXITED(x) && WEXITSTATUS(x) == 1)
+		{
+			kill_process(philo);
+			exit_free_close(philo);
+		}
 	}
-	pthread_join(monitor, NULL);
+	usleep(100);
 }

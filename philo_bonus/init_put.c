@@ -6,21 +6,31 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/11/27 17:23:09 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/03 03:19:57 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-void	exit_free(t_dt *dt, t_philo *philo, int flag)
+void	digit_checker(int argc, char *argv[], t_philo *philo, t_dt *dt)
 {
-	if (flag == 0)
+	int		i;
+
+	i = 0;
+	while (++i < argc)
 	{
-		free(dt->forks);
-		free(philo);
+		if (argv[i][0] < '0' || argv[i][0] > '9')
+		{
+			ft_putstr_fd("ERR :Arguments must be digit > 0\n", STDERR);
+			exit_free(dt, philo, 0);
+		}
 	}
-	free(dt);
-	exit (1);
+	if ((argc == 6 && dt->n_must_eat <= 0) || (dt->num_philo < 0
+			|| dt->die_time < 0 || dt->eat_time < 0 || dt->sleep_time < 0))
+	{
+		ft_putstr_fd("ERR :Arguments must be > 0\n", STDERR);
+		exit_free(dt, philo, 0);
+	}
 }
 
 int	init(t_dt *dt, t_philo **philo, int argc, char *argv[])
@@ -38,15 +48,8 @@ int	init(t_dt *dt, t_philo **philo, int argc, char *argv[])
 	if (argc == 6)
 		dt->n_must_eat = ft_atoi(argv[5]);
 	dt->all_eat = 0;
-	sem_unlink("file");
-	dt->forks = sem_open("file", O_CREAT, 0644, dt->num_philo);
 	*philo = (t_philo *)malloc(sizeof(t_philo) * dt->num_philo);
-	if ((argc == 6 && dt->n_must_eat <= 0) || (dt->num_philo < 0
-			|| dt->die_time < 0 || dt->eat_time < 0 || dt->sleep_time < 0))
-	{
-		ft_putstr_fd("ERR :Arguments must be > 0\n", STDERR);
-		exit_free(dt, *philo, 0);
-	}
+	digit_checker(argc, argv, *philo, dt);
 	if (dt->num_philo == 0)
 		exit_free(dt, *philo, 0);
 	init_philos(dt, *philo);
@@ -64,11 +67,14 @@ void	init_philos(t_dt *dt, t_philo *philo)
 		philo[i].meals_count = 0;
 		philo[i].dt = dt;
 		philo[i].state = START;
+		philo[i].last_eat = get_time_now();
 	}
+	sem_unlink("forks");
 	sem_unlink("print");
 	sem_unlink("lock");
+	dt->forks = sem_open("forks", O_CREAT, 0644, dt->num_philo);
 	dt->print_output = sem_open("print", O_CREAT, 0644, 1);
-	dt->lock_dead = sem_open("lock", O_CREAT, 0644, 1);
+	dt->lock_forks = sem_open("lock", O_CREAT, 0644, 1);
 }
 
 void	put_screen(t_philo *philo, int doing)
@@ -87,5 +93,6 @@ void	put_screen(t_philo *philo, int doing)
 		printf("%llu %d is sleeping \n", now, philo->id + 1);
 	else if (doing == DEAD)
 		printf("%llu %d died \n", now, philo->id + 1);
-	sem_post(philo->dt->print_output);
+	if (doing != DEAD)
+		sem_post(philo->dt->print_output);
 }
