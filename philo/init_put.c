@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/03 11:04:31 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/05 14:58:39 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,17 @@ void	init_philos(t_dt *dt, t_philo *philo)
 		philo[i].dt = dt;
 		philo[i].state = START;
 	}
-	dt->lock_race = malloc(sizeof(pthread_mutex_t) * 1);
-	dt->lock_race2 = malloc(sizeof(pthread_mutex_t) * 1);
-	dt->lock_race3 = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_last = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_meals = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_state = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_forks = malloc(sizeof(pthread_mutex_t) * 1);
+	dt->lock_dead = malloc(sizeof(pthread_mutex_t) * 1);
 	pthread_mutex_init(&dt->print_output, NULL);
-	pthread_mutex_init(&dt->lock_dead, NULL);
-	pthread_mutex_init(dt->lock_race, NULL);
-	pthread_mutex_init(dt->lock_race2, NULL);
-	pthread_mutex_init(dt->lock_race3, NULL);
+	pthread_mutex_init(dt->lock_dead, NULL);
+	pthread_mutex_init(dt->lock_last, NULL);
+	pthread_mutex_init(dt->lock_meals, NULL);
+	pthread_mutex_init(dt->lock_state, NULL);
+	pthread_mutex_init(dt->lock_forks, NULL);
 }
 
 void	put_screen(t_philo *philo, int doing)
@@ -108,4 +111,16 @@ void	put_screen(t_philo *philo, int doing)
 	else if (doing == DEAD)
 		printf("%llu %d died \n", now, philo->id + 1);
 	pthread_mutex_unlock(&philo->dt->print_output);
+}
+
+int	fork_check(t_philo *philo)
+{
+	if (philo->dt->num_philo == 1 || philo->dt->dead == DEAD)
+	{
+		sem_post(philo->dt->forks);
+		return (0);
+	}
+	sem_wait(philo->dt->forks);
+	put_screen(philo, RIGHT_FORK);
+	return (1);
 }

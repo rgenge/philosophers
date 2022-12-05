@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/03 03:19:57 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/05 14:59:55 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,15 @@ void	init_philos(t_dt *dt, t_philo *philo)
 	sem_unlink("forks");
 	sem_unlink("print");
 	sem_unlink("lock");
+	sem_unlink("meals");//novo
+	sem_unlink("state");//novo
+	sem_unlink("dead");//novo
 	dt->forks = sem_open("forks", O_CREAT, 0644, dt->num_philo);
 	dt->print_output = sem_open("print", O_CREAT, 0644, 1);
 	dt->lock_forks = sem_open("lock", O_CREAT, 0644, 1);
+	dt->lock_meals = sem_open("meals", O_CREAT, 0644, 1);
+	dt->lock_state = sem_open("state", O_CREAT, 0644, 1);
+	dt->lock_dead = sem_open("dead", O_CREAT, 0644, 1);
 }
 
 void	put_screen(t_philo *philo, int doing)
@@ -95,4 +101,16 @@ void	put_screen(t_philo *philo, int doing)
 		printf("%llu %d died \n", now, philo->id + 1);
 	if (doing != DEAD)
 		sem_post(philo->dt->print_output);
+}
+
+int	fork_check(t_philo *philo)
+{
+	if (philo->dt->num_philo == 1 || philo->dt->dead == DEAD)
+	{
+		sem_post(philo->dt->forks);
+		return (0);
+	}
+	sem_wait(philo->dt->forks);
+	put_screen(philo, RIGHT_FORK);
+	return (1);
 }

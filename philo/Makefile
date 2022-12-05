@@ -6,15 +6,15 @@
 #    By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 22:45:46 by acosta-a          #+#    #+#              #
-#    Updated: 2022/11/25 01:30:31 by acosta-a         ###   ########.fr        #
+#    Updated: 2022/12/05 10:34:09 by acosta-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRCS = init_put.c utils.c philo.c
+SRCS = init_put.c utils.c philo.c philo_aux.c
 
-FLAGS = -g -Werror -Wextra -Wall -pthread
+FLAGS = -g -Werror -Wextra -Wall -pthread # -fsanitize=thread
 
 OBJS = ${SRCS:.c=.o}
 
