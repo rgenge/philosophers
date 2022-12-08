@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/05 14:59:55 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/08 08:29:44 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	init_philos(t_dt *dt, t_philo *philo)
 	sem_unlink("forks");
 	sem_unlink("print");
 	sem_unlink("lock");
-	sem_unlink("meals");//novo
-	sem_unlink("state");//novo
-	sem_unlink("dead");//novo
+	sem_unlink("meals");
+	sem_unlink("state");
+	sem_unlink("dead");
 	dt->forks = sem_open("forks", O_CREAT, 0644, dt->num_philo);
 	dt->print_output = sem_open("print", O_CREAT, 0644, 1);
 	dt->lock_forks = sem_open("lock", O_CREAT, 0644, 1);

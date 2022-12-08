@@ -6,13 +6,13 @@
 #    By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 22:45:46 by acosta-a          #+#    #+#              #
-#    Updated: 2022/12/05 10:49:45 by acosta-a         ###   ########.fr        #
+#    Updated: 2022/12/08 08:31:20 by acosta-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo_bonus
 
-SRCS = init_put.c utils.c utils2.c philo_bonus.c
+SRCS = init_put.c utils.c utils2.c utils3.c philo_bonus.c
 
 FLAGS = -g -Werror -Wextra -Wall -pthread# -fsanitize=thread
 

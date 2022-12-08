@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/05 14:59:08 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/07 13:59:30 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ long long int		get_time_now(void);
 void				exit_free_close(t_philo *philo);
 void				kill_process(t_philo *philo);
 void				exit_free_close_2(t_philo *philo);
+void				exit_free_close_3(t_philo *philo);
 void				eat_sleep(t_philo *philo);
 #endif
