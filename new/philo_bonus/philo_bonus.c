@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:19 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 08:29:28 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/08 21:02:57 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	*check_death(void *arg)
 			sem_post(philo->dt->lock_meals);
 			sem_wait(philo->dt->lock_meals);
 			if (philo->dt->all_eat == philo->dt->num_philo)
-//				return(NULL);
 				exit_free_close_3(philo);
 			sem_post(philo->dt->lock_meals);
 		}

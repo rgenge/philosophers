@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:24 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 08:31:12 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/08 21:03:09 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	exit_free_close_2(t_philo *philo)
 	sem_unlink("state");
 	sem_unlink("dead");
 	free(philo->dt);
-//	free(philo);
 	exit(1);
 }
 

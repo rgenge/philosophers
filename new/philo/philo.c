@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:19 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 08:29:05 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/08 21:01:48 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	fork_check(t_philo *philo, int right_fork)
 	if (philo->dt->num_philo == 1 || philo->dt->dead == DEAD)
 	{
 		pthread_mutex_unlock(philo->dt->lock_dead);
-//		pthread_mutex_unlock(philo->dt->lock_forks);
 		pthread_mutex_unlock(&philo->dt->forks[philo->id]);
 		return (0);
 	}
@@ -95,11 +94,9 @@ void	*philo_doing(void *data)
 		pthread_mutex_unlock(philo->dt->lock_dead);
 		right_fork = (philo->id + 1) % philo->dt->num_philo;
 		pthread_mutex_lock(&philo->dt->forks[philo->id]);
-//		pthread_mutex_lock(philo->dt->lock_forks);
 		put_screen(philo, LEFT_FORK);
 		if (fork_check(philo, right_fork) == 0)
 			return (NULL);
-//		pthread_mutex_unlock(philo->dt->lock_forks);
 		eat_sleep(philo, right_fork);
 		put_screen(philo, THINK);
 	}
