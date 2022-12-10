@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/07 13:59:30 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 09:44:52 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_dt
 	sem_t			*lock_state;
 	sem_t			*lock_meals;
 	sem_t			*lock_dead;
+	sem_t			*lock_last;
 	int				free_flag;
 }	t_dt;
 
@@ -70,10 +71,9 @@ void				exit_free(t_dt *dt, t_philo *philo, int flag);
 int					init(t_dt *dt, t_philo **philo, int argc, char *argv[]);
 void				put_screen(t_philo *philo, int doing);
 int					fork_check(t_philo *philo);
-
+void				init_philos(t_dt *dt, t_philo *philo);
 /*philo*/
 void				create_philos(t_philo *philo, t_dt *dt);
-void				init_philos(t_dt *dt, t_philo *philo);
 void				*check_death(void *arg);
 /*utils*/
 void				ft_putstr_fd(char *s, int fd);

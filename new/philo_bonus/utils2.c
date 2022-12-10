@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:24 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 21:03:09 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 09:15:51 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	exit_free_close(t_philo *philo)
 	sem_unlink("meals");
 	sem_unlink("state");
 	sem_unlink("dead");
+	sem_unlink("last");
 	free(philo->dt);
 	free(philo);
 }
@@ -62,6 +63,7 @@ void	exit_free_close_2(t_philo *philo)
 	sem_unlink("meals");
 	sem_unlink("state");
 	sem_unlink("dead");
+	sem_unlink("last");
 	free(philo->dt);
 	exit(1);
 }
@@ -76,7 +78,9 @@ void	eat_sleep(t_philo *philo)
 	sem_wait(philo->dt->lock_meals);
 	philo->meals_count++;
 	sem_post(philo->dt->lock_meals);
+	sem_wait(philo->dt->lock_last);
 	philo->last_eat = get_time_now();
+	sem_post(philo->dt->lock_last);
 	usleep(philo->dt->eat_time * 1000);
 	sem_post(philo->dt->forks);
 	sem_post(philo->dt->forks);

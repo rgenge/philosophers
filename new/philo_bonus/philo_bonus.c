@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:19 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 21:02:57 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 09:41:09 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,18 @@ void	check_death_aux(t_philo *philo)
 {
 	long long	now;
 
-	sem_post(philo->dt->lock_state);
 	now = get_time_now();
+	sem_wait(philo->dt->lock_last);
 	if (now - philo->last_eat >= philo->dt->die_time)
 	{
 		sem_wait(philo->dt->lock_dead);
 		philo->dt->dead = DEAD;
 		sem_post(philo->dt->lock_dead);
 		put_screen(philo, DEAD);
+		sem_post(philo->dt->lock_last);
 		exit_free_close_2(philo);
 	}
+	sem_post(philo->dt->lock_last);
 	sem_wait(philo->dt->lock_meals);
 }
 

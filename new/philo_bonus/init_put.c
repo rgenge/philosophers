@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 08:29:44 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 08:11:49 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,14 @@ void	init_philos(t_dt *dt, t_philo *philo)
 	sem_unlink("meals");
 	sem_unlink("state");
 	sem_unlink("dead");
+	sem_unlink("last");
 	dt->forks = sem_open("forks", O_CREAT, 0644, dt->num_philo);
 	dt->print_output = sem_open("print", O_CREAT, 0644, 1);
 	dt->lock_forks = sem_open("lock", O_CREAT, 0644, 1);
 	dt->lock_meals = sem_open("meals", O_CREAT, 0644, 1);
 	dt->lock_state = sem_open("state", O_CREAT, 0644, 1);
 	dt->lock_dead = sem_open("dead", O_CREAT, 0644, 1);
+	dt->lock_last = sem_open("last", O_CREAT, 0644, 1);
 }
 
 void	put_screen(t_philo *philo, int doing)
@@ -88,6 +90,7 @@ void	put_screen(t_philo *philo, int doing)
 	long long	now;
 
 	sem_wait(philo->dt->print_output);
+	sem_wait(philo->dt->lock_dead);
 	now = get_time_now();
 	if ((doing == LEFT_FORK || doing == RIGHT_FORK) && philo->dt->dead == 0)
 		printf("%llu %d has taken a fork \n", now, philo->id + 1);
@@ -99,6 +102,7 @@ void	put_screen(t_philo *philo, int doing)
 		printf("%llu %d is sleeping \n", now, philo->id + 1);
 	else if (doing == DEAD)
 		printf("%llu %d died \n", now, philo->id + 1);
+	sem_post(philo->dt->lock_dead);
 	if (doing != DEAD)
 		sem_post(philo->dt->print_output);
 }

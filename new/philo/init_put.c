@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/06 10:18:15 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 07:38:15 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	put_screen(t_philo *philo, int doing)
 {
 	long long	now;
 
-	pthread_mutex_lock(&philo->dt->print_output);
+//	pthread_mutex_lock(&philo->dt->print_output);
+	pthread_mutex_lock(philo->dt->lock_dead);
 	now = get_time_now();
 	if ((doing == LEFT_FORK || doing == RIGHT_FORK) && philo->dt->dead == 0)
 		printf("%llu %d has taken a fork \n", now, philo->id + 1);
@@ -110,5 +111,6 @@ void	put_screen(t_philo *philo, int doing)
 		printf("%llu %d is sleeping \n", now, philo->id + 1);
 	else if (doing == DEAD)
 		printf("%llu %d died \n", now, philo->id + 1);
-	pthread_mutex_unlock(&philo->dt->print_output);
+	pthread_mutex_unlock(philo->dt->lock_dead);
+//	pthread_mutex_unlock(&philo->dt->print_output);
 }
