@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:19 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/08 21:01:48 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/12 10:20:52 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,17 @@ int	main(int argc, char *argv[])
 	free(dt->lock_last);
 	free(dt->lock_meals);
 	free(dt->lock_state);
-	free(dt->lock_forks);
 	free(dt);
 	free(philo);
 }
 
-int	fork_check(t_philo *philo, int right_fork)
+int	fork_check(t_philo *philo, int right_fork, int left_fork)
 {
 	pthread_mutex_lock(philo->dt->lock_dead);
 	if (philo->dt->num_philo == 1 || philo->dt->dead == DEAD)
 	{
 		pthread_mutex_unlock(philo->dt->lock_dead);
-		pthread_mutex_unlock(&philo->dt->forks[philo->id]);
+		pthread_mutex_unlock(&philo->dt->forks[left_fork]);
 		return (0);
 	}
 	pthread_mutex_unlock(philo->dt->lock_dead);
@@ -54,12 +53,12 @@ int	fork_check(t_philo *philo, int right_fork)
 	return (1);
 }
 
-void	eat_sleep(t_philo *philo, int right_fork)
+void	eat_sleep(t_philo *philo, int right_fork, int left_fork)
 {
-	put_screen(philo, EAT);
 	pthread_mutex_lock(philo->dt->lock_state);
 	philo->state = EAT;
 	pthread_mutex_unlock(philo->dt->lock_state);
+	put_screen(philo, EAT);
 	pthread_mutex_lock(philo->dt->lock_meals);
 	philo->meals_count++;
 	pthread_mutex_unlock(philo->dt->lock_meals);
@@ -71,8 +70,8 @@ void	eat_sleep(t_philo *philo, int right_fork)
 	pthread_mutex_lock(philo->dt->lock_state);
 	philo->state = SLEEP;
 	pthread_mutex_unlock(philo->dt->lock_state);
-	pthread_mutex_unlock(&philo->dt->forks[philo->id]);
 	pthread_mutex_unlock(&philo->dt->forks[right_fork]);
+	pthread_mutex_unlock(&philo->dt->forks[left_fork]);
 	usleep(philo->dt->sleep_time * 1000);
 }
 
@@ -80,11 +79,14 @@ void	*philo_doing(void *data)
 {
 	t_philo					*philo;
 	int						right_fork;
+	int						left_fork;
 
 	philo = data;
 	while ((philo->meals_count < philo->dt->n_must_eat
 			|| philo->dt->n_must_eat == -1))
 	{
+		if (philo->dt->num_philo % 2 != 0)
+			usleep(300);
 		pthread_mutex_lock(philo->dt->lock_dead);
 		if (philo->dt->dead != 0)
 		{
@@ -92,12 +94,11 @@ void	*philo_doing(void *data)
 			return (NULL);
 		}
 		pthread_mutex_unlock(philo->dt->lock_dead);
+		left_fork = philo->id;
 		right_fork = (philo->id + 1) % philo->dt->num_philo;
-		pthread_mutex_lock(&philo->dt->forks[philo->id]);
-		put_screen(philo, LEFT_FORK);
-		if (fork_check(philo, right_fork) == 0)
+		if (left_fork_check(philo, right_fork, left_fork) == 1)
 			return (NULL);
-		eat_sleep(philo, right_fork);
+		eat_sleep(philo, right_fork, left_fork);
 		put_screen(philo, THINK);
 	}
 	return (NULL);

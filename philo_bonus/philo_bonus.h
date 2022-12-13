@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/10 09:44:52 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/10 19:08:42 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
-# include <string.h>
 # include <stdio.h>
 # include <sys/time.h>
 # include <semaphore.h>

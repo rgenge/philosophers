@@ -6,7 +6,7 @@
 #    By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 22:45:46 by acosta-a          #+#    #+#              #
-#    Updated: 2022/12/08 20:57:38 by acosta-a         ###   ########.fr        #
+#    Updated: 2022/12/12 09:30:48 by acosta-a         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,6 @@ clean:
 fclean: clean
 	rm -rf $(NAME)
 
-re: fclean all make clean
+re: fclean all clean
 
 .PHONY: clean fclean re

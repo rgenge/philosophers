@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 23:10:45 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/10 09:47:19 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/12 10:21:30 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <unistd.h>
-# include <string.h>
 # include <stdio.h>
 # include <sys/time.h>
 # define START 0
@@ -46,8 +45,6 @@ typedef struct s_dt
 	pthread_mutex_t	*lock_last;
 	pthread_mutex_t	*lock_meals;
 	pthread_mutex_t	*lock_state;
-	pthread_mutex_t	*lock_forks;
-	pthread_mutex_t	*lock_race5;
 }	t_dt;
 
 typedef struct s_philo
@@ -69,6 +66,9 @@ void				put_screen(t_philo *philo, int doing);
 void				create_philos(t_philo *philo, t_dt *dt);
 void				init_philos(t_dt *dt, t_philo *philo);
 void				*check_death(void *arg);
+int					left_fork_check(t_philo *philo, int right_fork,
+						int left_fork);
+int					fork_check(t_philo *philo, int right_fork, int left_fork);
 /*utils*/
 void				ft_putstr_fd(char *s, int fd);
 int					ft_atoi(const char *s);

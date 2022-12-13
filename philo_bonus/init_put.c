@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/10 08:11:49 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/11 17:00:35 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,14 @@ void	put_screen(t_philo *philo, int doing)
 
 int	fork_check(t_philo *philo)
 {
+	sem_wait(philo->dt->lock_dead);
 	if (philo->dt->num_philo == 1 || philo->dt->dead == DEAD)
 	{
+		sem_post(philo->dt->lock_dead);
 		sem_post(philo->dt->forks);
 		return (0);
 	}
+	sem_post(philo->dt->lock_dead);
 	sem_wait(philo->dt->forks);
 	put_screen(philo, RIGHT_FORK);
 	return (1);

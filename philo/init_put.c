@@ -6,7 +6,7 @@
 /*   By: acosta-a <acosta-a@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 22:49:22 by acosta-a          #+#    #+#             */
-/*   Updated: 2022/12/10 10:06:07 by acosta-a         ###   ########.fr       */
+/*   Updated: 2022/12/12 10:21:12 by acosta-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,12 @@ void	init_philos(t_dt *dt, t_philo *philo)
 	dt->lock_last = malloc(sizeof(pthread_mutex_t) * 1);
 	dt->lock_meals = malloc(sizeof(pthread_mutex_t) * 1);
 	dt->lock_state = malloc(sizeof(pthread_mutex_t) * 1);
-	dt->lock_forks = malloc(sizeof(pthread_mutex_t) * 1);
 	dt->lock_dead = malloc(sizeof(pthread_mutex_t) * 1);
 	pthread_mutex_init(&dt->print_output, NULL);
 	pthread_mutex_init(dt->lock_dead, NULL);
 	pthread_mutex_init(dt->lock_last, NULL);
 	pthread_mutex_init(dt->lock_meals, NULL);
 	pthread_mutex_init(dt->lock_state, NULL);
-	pthread_mutex_init(dt->lock_forks, NULL);
 }
 
 void	put_screen(t_philo *philo, int doing)
