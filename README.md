@@ -1,4 +1,4 @@
-## Philosophers
+## Philosophers dining problem
 
 This project focuses on solving the dining philosophers problem, this is often used as an example to illustrate synchronization in multiple threads and techniques for resolving them.
 
@@ -29,8 +29,6 @@ The mutex is designed to lock the forks, so no one else can use.
 Another function used is usleep, because sometimes you have to wait for a little bit so your thread finishes.
 
 ## Using it
-
-### Dependencies
 
 To use the program you have to type 4 or 5 arguments.
 
