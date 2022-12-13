@@ -18,7 +18,7 @@ Once Philosopher 1 is eating he is using the 2 fork so Philosopher 2 can't start
 
 That's the thing, philosophers are threads and the mutex functions are the forks. The mutex is designed to lock the forks, so no one else can use.
 
-Another function used is usleep, because sometimes you have to wait for a little bit so your thread finishes.
+Another function used is usleep, because sometimes you have to wait a while for a thread to go through some point.
 
 ## Using it
 
