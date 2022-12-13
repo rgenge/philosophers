@@ -1,5 +1,5 @@
 ## Philosophers dining problem
-![image](https://user-images.githubusercontent.com/82456124/207210293-15ab5b9c-97dc-4997-8a75-b2403fb40c97.png)
+![image](https://user-images.githubusercontent.com/82456124/207210293-15ab5b9c-97dc-4997-8a75-b2403fb40c97.png) 
 
 This project focuses on solving the dining philosophers problem, this is often used as an example to illustrate synchronization in multiple threads and techniques for resolving them.
 
