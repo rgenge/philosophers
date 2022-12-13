@@ -23,24 +23,15 @@ Another function used is usleep, because sometimes you have to wait for a little
 
 To use the program you have to type 4 or 5 arguments.
 
-◦ number_of_philosophers: The number of philosophers and also the number
-of forks.
+◦ number_of_philosophers: The number of philosophers and also the number of forks.
 
-◦ time_to_die : If a philosopher didn’t start eating time_to_die
+◦ time_to_die : If a philosopher didn’t start eating time_to_die since the beginning of their last meal or the beginning of the simulation, they die.
 
-since the beginning of their last meal or the beginning of the simulation, they die.
-
-◦ time_to_eat: The time it takes for a philosopher to eat.
-
-During that time, they will need to hold two forks.
+◦ time_to_eat: The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
 
 ◦ time_to_sleep): The time a philosopher will spend sleeping.
 
-◦ number_of_times_each_philosopher_must_eat (optional): If all
-
-philosophers have eaten at least number_of_times_each_philosopher_must_eat
-
-times, the simulation stops.
+◦ number_of_times_each_philosopher_must_eat (optional): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times, the simulation stops.
 
 ./philo [nbr_of_philosophers] [die_time] [eat_time] [sleep_time] [optional: number_of_times_each_philosopher_must_eat]
 
